@@ -23,10 +23,12 @@
     <junit-version>4.13.1</junit-version>
     <reactor-version>3.3.10.RELEASE</reactor-version>
     <reactor-netty-version>0.7.15.RELEASE</reactor-netty-version>
+    <jackson-threetenbp-version>2.9.10</jackson-threetenbp-version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+<!--
   <dependencies>
       <dependency>
           <groupId>io.swagger</groupId>
@@ -34,7 +36,6 @@
           <version>${swagger-annotations-version}</version>
       </dependency>
       
-      <!-- @Nullable annotation -->
       <dependency>
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>jsr305</artifactId>
@@ -47,7 +48,6 @@
           <version>${reactor-version}</version>
       </dependency>
 
-      <!-- HTTP client: Spring WebFlux -->
       <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-webflux</artifactId>
@@ -60,7 +60,6 @@
           <version>${reactor-netty-version}</version>
       </dependency>
 
-      <!-- JSON processing: jackson -->
       <dependency>
           <groupId>com.fasterxml.jackson.core</groupId>
           <artifactId>jackson-databind</artifactId>
@@ -84,13 +83,77 @@
           <scope>provided</scope>
       </dependency>
 
-      <!-- JUnit Test -->
       <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
           <version>4.11</version>
           <scope>test</scope>
       </dependency>
+  </dependencies>
+-->
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations-version}</version>
+        </dependency>
+
+        <!-- @Nullable annotation -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- HTTP client: Spring RestTemplate -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-web-version}</version>
+        </dependency>
+
+        <!-- JSON processing: jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable-version}</version>
+        </dependency>
+            <dependency>
+                <groupId>com.github.joschi.jackson</groupId>
+                <artifactId>jackson-datatype-threetenbp</artifactId>
+                <version>${jackson-threetenbp-version}</version>
+            </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax-annotation-version}</version>
+            <scope>provided</scope>
+        </dependency>
   </dependencies>
 
   <build>
@@ -142,7 +205,7 @@
           <groupId>org.openapitools</groupId>
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <!-- RELEASE_VERSION -->
-          <version>5.0.0</version>
+          <version>5.0.1</version>
           <!-- /RELEASE_VERSION -->
           <executions>
             <execution>
@@ -150,15 +213,20 @@
                 <goal>generate</goal>
               </goals>
               <configuration>
-                <inputSpec>${project.basedir}/src/main/resources/e-sign_anywhere_api_fi-V4.0-resolved.yaml</inputSpec>
-                <apiPackage>osplus.esa.api</apiPackage>
-                <modelPackage>osplus.esa.model</modelPackage>
-                <invokerPackage>osplus.esa.invoker</invokerPackage>
+                <inputSpec>${project.basedir}/src/main/resources/esignanywhere-v4.json</inputSpec>
+                <apiPackage>osplus.esignanywhere.v4.api</apiPackage>
+                <modelPackage>osplus.esignanywhere.v4.model</modelPackage>
+                <invokerPackage>osplus.esignanywhere.v4.invoker</invokerPackage>
                 <generatorName>java</generatorName>
                 <dateLibrary>java8</dateLibrary>
-                <library>webclient</library>
+                <library>resttemplate</library>
+                <generateModelTests>false</generateModelTests>
+                <generateApiTests>false</generateApiTests>
+                <generateSupportingFiles>true</generateSupportingFiles>
+                <generateModelDocumentation>false</generateModelDocumentation>
+                <generateApiDocumentation>false</generateApiDocumentation>
                 <configOptions>
-                  <sourceFolder>src/gen/java/main</sourceFolder>
+                  <sourceFolder>src/main/java</sourceFolder>
                 </configOptions>
               </configuration>
             </execution>
